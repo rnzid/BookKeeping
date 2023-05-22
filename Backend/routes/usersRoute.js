@@ -1,20 +1,28 @@
-const express = require('express');
+const express = require("express");
 const usersRoute = express.Router();
-const User= require('../models/User');
-const asyncHandler = require('express-async-handler')
+const User = require("../models/User");
+const asyncHandler = require("express-async-handler");
+const generateToken = require("../utils/generateToken");
 
 //UserRoutes
 //Register
-usersRoute.post('/register',asyncHandler(async(req,res)=>{
-    const{name,email,password}=req.body;
+usersRoute.post(
+  "/register",
+  asyncHandler(async (req, res) => {
+    const { name, email, password } = req.body;
 
-    const userExists = await User.findOne({email: email});
-    if(userExists){
-        throw new Error('User exists')
+    const userExists = await User.findOne({ email: email });
+    if (userExists) {
+      throw new Error("User exists");
     }
-const userCreated = await User.create({name, email, password});
-res.send(userCreated);
-}));
+    const userCreated = await User.create({ name, email, password });
+    res.json({_id: userCreated.id,
+        name: userCreated.name,
+        password: userCreated.password,
+        email: userCreated.email,
+        token: generateToken(userCreated._id),});
+  })
+);
 
 /* async (req, res)=>{
     try {
@@ -32,42 +40,43 @@ res.send(userCreated);
 } */
 
 //login
-usersRoute.post('/login',asyncHandler(async(req,res)=>{
-    const {email,password}=req.body;
+usersRoute.post(
+  "/login",
+  asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
-    const user = await User.findOne({email});
-    if(!user){
-        res.status(401);
-        throw new Error('invalid Credentials')
-    }else{
-        //set statuscode
-        res.status(200);
-        res.json({
-            _id: user.id,
-            name:user.name,
-            password: user.password,
-            email: user.email,
-
-        })
-    }
-}));
+    const user = await User.findOne({ email });
+   if(user && (await user.isPasswordMatch(password))){
+ //set statuscode
+ res.status(200);
+ res.json({
+   _id: user.id,
+   name: user.name,
+   password: user.password,
+   email: user.email,
+   token: generateToken(user._id),
+ });
+   }else{
+    res.status(401);
+    throw new Error("invalid Credentials");
+   }
+   
+  })
+);
 
 //Update
-usersRoute.put('/update',(req, res)=>{
-    res.send('update Route')
+usersRoute.put("/update", (req, res) => {
+  res.send("update Route");
 });
 
-
 //Delete
-usersRoute.delete('/:id',(req, res)=>{
-    res.send('Delete Route')
+usersRoute.delete("/:id", (req, res) => {
+  res.send("Delete Route");
 });
 
 //fetch Users
-usersRoute.get('/',(req,res)=>{
-    res.send('fetch Users')
-})
+usersRoute.get("/", (req, res) => {
+  res.send("fetch Users");
+});
 
-
-
-module.exports= usersRoute;
+module.exports = usersRoute;
