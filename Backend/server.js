@@ -1,6 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose')
-const dbConnect = require('./config/dbConnect')
+const mongoose = require('mongoose');
+const dbConnect = require('./config/dbConnect');
+const usersRoute= require('./routes/usersRoute');
 const app = express();
 
 
@@ -8,13 +9,14 @@ const app = express();
 dbConnect()
 // user-Ranjit pw-J6wNDYQU75huyi4k
 
-//Routes
-//UserRoutes
+//passing body bata
+app.use(express.json());
 
-//Register
-app.post('/api/users/register',(req, res)=>{
-    res.send('Register Route')
-});
+
+//Routes
+app.use('/api/users',usersRoute);
+
+
 
 //login
 app.post('/api/users/login',(req, res)=>{
