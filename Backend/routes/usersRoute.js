@@ -16,11 +16,13 @@ usersRoute.post(
       throw new Error("User exists");
     }
     const userCreated = await User.create({ name, email, password });
-    res.json({_id: userCreated.id,
-        name: userCreated.name,
-        password: userCreated.password,
-        email: userCreated.email,
-        token: generateToken(userCreated._id),});
+    res.json({
+      _id: userCreated.id,
+      name: userCreated.name,
+      password: userCreated.password,
+      email: userCreated.email,
+      token: generateToken(userCreated._id),
+    });
   })
 );
 
@@ -46,21 +48,20 @@ usersRoute.post(
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-   if(user && (await user.isPasswordMatch(password))){
- //set statuscode
- res.status(200);
- res.json({
-   _id: user.id,
-   name: user.name,
-   password: user.password,
-   email: user.email,
-   token: generateToken(user._id),
- });
-   }else{
-    res.status(401);
-    throw new Error("invalid Credentials");
-   }
-   
+    if (user && (await user.isPasswordMatch(password))) {
+      //set statuscode
+      res.status(200);
+      res.json({
+        _id: user.id,
+        name: user.name,
+        password: user.password,
+        email: user.email,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(401);
+      throw new Error("invalid Credentials");
+    }
   })
 );
 
