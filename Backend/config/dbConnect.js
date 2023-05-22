@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dbConnect = () => {
   mongoose
     .connect(
-      "mongodb+srv://Ranjit:J6wNDYQU75huyi4k@cluster0.qdyia3u.mongodb.net/book-keeping-app"
+      process.env.MONGODB_URL
     )
     .then(() => console.log("Db connected"))
     .catch((err) => console.log(err));
