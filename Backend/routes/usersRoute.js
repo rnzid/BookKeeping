@@ -1,24 +1,34 @@
 const express = require('express');
 const usersRoute = express.Router();
 const User= require('../models/User');
+const asyncHandler = require('express-async-handler')
 
 //UserRoutes
 //Register
-usersRoute.post('/register',async (req, res)=>{
-    try {
-        
-        //console.log(req.body);
-        const {name, email, password} = req.body;
-        const user = await User.create({name, email, password});
-        console.log(user);
-        res.send(user);
-        
-    }catch(error){
-        console.log(error);
+usersRoute.post('/register',asyncHandler(async(req,res)=>{
+    const{name,email,password}=req.body;
+
+    const userExists = await User.findOne({email: email});
+    if(userExists){
+        throw new Error('User exists')
     }
+const userCreated = await User.create({name, email, password});
+}));
 
-});
+// async (req, res)=>{
+//     try {
+        
+//         //console.log(req.body);
+//         const {name, email, password} = req.body;
+//         const user = await User.create({name, email, password});
+//         console.log(user);
+//         res.send(user);
+        
+//     }catch(error){
+//         res.send(error);
+//     }
 
+// }
 
 //login
 usersRoute.post('/login',(req, res)=>{

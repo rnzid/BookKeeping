@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dbConnect = require('./config/dbConnect');
 const usersRoute= require('./routes/usersRoute');
-const app = express();
 
+const app = express();
+const error = require('./middlewares/errorMiddlewareHandler')
 
 //connect DB
 dbConnect()
@@ -16,7 +17,8 @@ app.use(express.json());
 //Routes
 app.use('/api/users',usersRoute);
 
-
+//Error Middleware
+app.use(error.errorMiddlewareHandler)
 
 //login
 app.post('/api/users/login',(req, res)=>{
