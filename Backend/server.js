@@ -1,16 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose')
-
+const dbConnect = require('./config/dbConnect')
 const app = express();
 
 
 //connect DB
-mongoose.connect('mongodb+srv://Ranjit:J6wNDYQU75huyi4k@cluster0.qdyia3u.mongodb.net/book-keeping-app').then(()=>console.log("Db connected")).catch(err=>console.log(err));
-
+dbConnect()
 // user-Ranjit pw-J6wNDYQU75huyi4k
 
 //Routes
 //UserRoutes
+
+//Register
 app.post('/api/users/register',(req, res)=>{
     res.send('Register Route')
 });
