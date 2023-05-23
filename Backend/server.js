@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const dbConnect = require('./config/dbConnect');
 const usersRoute= require('./routes/usersRoute');
+const bookRouter= require('./routes/bookRoutes');
 const app = express();
 const error = require('./middlewares/errorMiddlewareHandler')
 
@@ -16,21 +17,11 @@ app.use(express.json());
 
 
 //Routes
+//user
 app.use('/api/users',usersRoute);
 
-
-//login
-app.post('/api/users/login',usersRoute);
-
-//Update
-app.put('/api/users/update',usersRoute);
-
-//Delete
-app.delete('/api/users/:id',usersRoute);
-
-
-//fetch Users
-app.get('/api/users',usersRoute)
+//Book
+app.use('/api/books',bookRouter);
 
 
  //console.log(process.env.JWT_SECRET_KEY);
