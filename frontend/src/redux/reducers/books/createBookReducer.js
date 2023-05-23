@@ -1,4 +1,4 @@
-const { CREATE_BOOK_REQUEST, CREATE_BOOK_FAIL } = require("../../action/actionTypes");
+const { CREATE_BOOK_REQUEST,CREATE_BOOK_SUCCESS, CREATE_BOOK_FAIL } = require("../../action/actionTypes");
 
 const createBookReducer = (state={},action)=>{
     switch(action.type){
@@ -20,3 +20,5 @@ const createBookReducer = (state={},action)=>{
 
     }
 }
+
+export {createBookReducer}
